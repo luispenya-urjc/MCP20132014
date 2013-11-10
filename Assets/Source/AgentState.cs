@@ -31,7 +31,7 @@ namespace MCP_AI
             set { _hits = value; }
         }
 
-        private float _speed=20;
+        private float _speed=100;
 
         public float Speed
         {

@@ -34,20 +34,41 @@ public class AgentMovement : MonoBehaviour {
 	void FixedUpdate () {
         if (movementTarget != null && seek.IsDone())
         {
-            
+
 
             if (currentWaypoint < agentState.CurrentPath.vectorPath.Count)
             {
+                if (animation.IsPlaying("idle"))
+                {
+                    animation.Play("walk");
+                }
                 Vector3 dir = (agentState.CurrentPath.vectorPath[currentWaypoint] - transform.position).normalized;
                 dir *= agentState.Speed * Time.fixedDeltaTime;
 
-                Debug.Log("Move to WP:" +currentWaypoint+ "  dir: "+ dir);
+                Debug.Log("Move to WP:" + currentWaypoint + "  dir: " + -dir);
+               // movementController.transform.LookAt(agentState.CurrentPath.vectorPath[currentWaypoint]);
+                transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                        Quaternion.LookRotation(new Vector3(dir.x,0f,dir.z)),
+                        Time.deltaTime * 10
+    );
+
+                //
+
                 movementController.SimpleMove(dir);
 
                 if (Vector3.Distance(transform.position, agentState.CurrentPath.vectorPath[currentWaypoint]) < minDistanceToWayPoint)
                 {
                     currentWaypoint++;
                 }
+            }
+            else
+            {
+                if (animation.IsPlaying("walk"))
+                {
+                    animation.Play("idle");
+                }
+
             }
         }
 	}
