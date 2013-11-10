@@ -1,0 +1,97 @@
+﻿using UnityEngine;
+using System.Collections;
+using Pathfinding;
+
+namespace MCP_AI {
+public class AgentMovement : MonoBehaviour {
+
+    private Seeker seek;
+    public AgentState agentState;
+
+    public Transform movementTarget=null;
+
+    private CharacterController movementController=null;
+    private int currentWaypoint=0;
+
+    private int minDistanceToWayPoint = 2;
+    // Use this for initialization
+	void Start () {
+
+        agentState=GetComponent<AgentAI>()._state;
+        seek = GetComponent<Seeker>();
+        movementController = GetComponent<CharacterController>();
+       // StartupNode();
+
+        agentState.CurrentPath= ABPath.Construct (gameObject.transform.position, movementTarget.position);
+        //path.CalculateStep(100);
+
+        seek.StartPath(agentState.CurrentPath, OnPathComplete, -1);
+       
+	}
+	
+   
+	// Update is called once per frame
+	void FixedUpdate () {
+        if (movementTarget != null && seek.IsDone())
+        {
+            
+
+            if (currentWaypoint < agentState.CurrentPath.vectorPath.Count)
+            {
+                Vector3 dir = (agentState.CurrentPath.vectorPath[currentWaypoint] - transform.position).normalized;
+                dir *= agentState.Speed * Time.fixedDeltaTime;
+
+                Debug.Log("Move to WP:" +currentWaypoint+ "  dir: "+ dir);
+                movementController.SimpleMove(dir);
+
+                if (Vector3.Distance(transform.position, agentState.CurrentPath.vectorPath[currentWaypoint]) < minDistanceToWayPoint)
+                {
+                    currentWaypoint++;
+                }
+            }
+        }
+	}
+
+    public void OnDisable()
+    {
+        seek.pathCallback -= OnPathComplete;
+    }
+
+    void OnPathComplete(Path p)
+    {
+        Debug.Log("Path Length: "+p.GetTotalLength());
+        Debug.Log(agentState.CurrentPath.DebugString(PathLog.Heavy)); 
+    } 
+
+    void StartupNode()
+    {
+        //Get a random node to update
+        NNConstraint constr = new NNConstraint();
+        constr.graphMask = 1<<0;
+        NNInfo node = AstarPath.active.GetNearest(gameObject.transform.position,constr);
+        Debug.Log(node.clampedPosition);
+        AstarPath.RegisterSafeUpdate(delegate()
+        {
+            //Move the node a bit
+            node.clampedPosition = gameObject.transform.position;//+= (Int3)(Random.insideUnitSphere * 0.1f);
+
+            //Recalculate the area around the node.
+            //No functions for updating a single node is available, so we create
+            //a bounds object which contains that node and only a small volume around it
+            AstarPath.active.UpdateGraphs(new GraphUpdateObject(new Bounds((Vector3)node.node.position, new Vector3(0.1f, 0.1f, 0.1f))));
+
+            //Make sure the above graph update is done now
+            AstarPath.active.FlushGraphUpdates();
+
+            //The update area functions of the built-in graphs generally assumes that the position of the node
+            //has not changed, so some connection costs might be wrong
+            node.node.RecalculateConnectionCosts(true);
+
+        }, true);
+
+        //If you want to make sure the update is called directly instead of
+        //at the end of this frame or after a few frames.
+        //AstarPath.active.FlushThreadSafeCallbacks ();
+    }
+}
+}
