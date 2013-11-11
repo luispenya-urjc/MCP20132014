@@ -13,7 +13,7 @@ public class AgentMovement : MonoBehaviour {
     private CharacterController movementController=null;
     private int currentWaypoint=0;
 
-    private int minDistanceToWayPoint = 2;
+    private float minDistanceToWayPoint = 1.5f;
     // Use this for initialization
 	void Start () {
 
@@ -32,20 +32,20 @@ public class AgentMovement : MonoBehaviour {
    
 	// Update is called once per frame
 	void FixedUpdate () {
-        if (movementTarget != null && seek.IsDone())
+        if (movementTarget != null && seek.IsDone() && agentState.Moving)
         {
-
+            if (animation.IsPlaying("idle"))
+            {
+                animation.Play("walk");
+            }
 
             if (currentWaypoint < agentState.CurrentPath.vectorPath.Count)
             {
-                if (animation.IsPlaying("idle"))
-                {
-                    animation.Play("walk");
-                }
+               
                 Vector3 dir = (agentState.CurrentPath.vectorPath[currentWaypoint] - transform.position).normalized;
                 dir *= agentState.Speed * Time.fixedDeltaTime;
 
-                Debug.Log("Move to WP:" + currentWaypoint + "  dir: " + -dir);
+                //Debug.Log("Move to WP:" + currentWaypoint + "  dir: " + -dir);
                // movementController.transform.LookAt(agentState.CurrentPath.vectorPath[currentWaypoint]);
                 transform.rotation = Quaternion.Slerp(
                 transform.rotation,

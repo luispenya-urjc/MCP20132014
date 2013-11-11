@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using MCP_AI;
 
 namespace FSM
 {
@@ -19,7 +20,7 @@ namespace FSM
         public override void Execute(StateMachine obj)
         {
             Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
-            if (obj.environment.Show)
+            /*if (obj.environment.Show)
             {
                 obj.ChangeState(ChaseState.GetInstance());
             }
@@ -27,6 +28,18 @@ namespace FSM
             {
                 obj.ChangeState(RoamState.GetInstance());
             }
+             */
+            AgentState s=obj.agent.GetComponent<AgentAI>()._state;
+
+            s.AttackTarget = GameObject.Find("AttTarget");
+
+
+            if (s.CurrentPath.IsDone())
+            {
+                obj.ChangeState(RoamState.GetInstance());
+            }
+
+
         }
 
         public override void Exit(StateMachine obj)

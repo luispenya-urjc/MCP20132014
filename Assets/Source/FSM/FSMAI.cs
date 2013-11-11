@@ -9,7 +9,7 @@ namespace MCP_AI
         private FSM.StateMachine state_machine = new FSM.StateMachine();
         public Object blood;
 
-        private GameObject _agent;
+       
 
         // Use this for initialization
         public FSMAI(GameObject agent)
@@ -42,13 +42,13 @@ namespace MCP_AI
             MonoBehaviour.Destroy(o, 1.0f);
         }
 
-        public void Init()
+        public override void Init()
         {
             FSM.Environment environment = GameObject.Find("Environment").GetComponent<FSM.Environment>();
             state_machine.Init(_agent, environment);
         }
 
-        public void RefreshAI()
+        public override void RefreshAI()
         {
             state_machine.UpdateFSM();
         }

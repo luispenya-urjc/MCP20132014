@@ -22,13 +22,23 @@ namespace MCP_AI
             set { _currentPath = value; }
         }
 
-
+        private int _maxHits = 10;
         private int _hits = 10;
 
         public int Hits
         {
             get { return _hits; }
-            set { _hits = value; }
+            
+        }
+
+        public void Heal(int val)
+        {
+            _hits=System.Math.Min(_hits +val,_maxHits);
+        }
+
+        public void Wound(int val)
+        {
+            _hits -= val;
         }
 
         private float _speed=100;
@@ -39,6 +49,28 @@ namespace MCP_AI
             
         }
 
-    
+        private bool _moving = false;
+
+        public bool Moving
+        {
+            get { return _moving; }
+            set { _moving = value; }
+        }
+
+        private Transform _movementTarget;
+
+        public Transform MovementTarget
+        {
+            get { return _movementTarget; }
+            set { _movementTarget = value; }
+        }
+
+        private GameObject _attackTarget;
+
+        public GameObject AttackTarget
+        {
+            get { return _attackTarget; }
+            set { _attackTarget = value; }
+        }
     }
 }
