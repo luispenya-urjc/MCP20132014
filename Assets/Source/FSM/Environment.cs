@@ -48,5 +48,23 @@ namespace FSM
             return st;
         }
 
+        void Start()
+        {
+
+            for (int x = 0; x < 5; x++)
+            {
+                GameObject[] s = GameObject.FindGameObjectsWithTag("spawnarea-attack");
+                int i = UnityEngine.Random.Range(0, s.Length);
+                Vector3 pos = s[i].transform.position + (UnityEngine.Random.insideUnitSphere * (s[i].transform.localScale.x / 2.0f));
+                pos.y = 1f;
+                Instantiate(Resources.Load("FSMActor"), pos, Quaternion.identity).name = "nuevo"+x;
+
+                Debug.Log("Position of cube: " + pos);
+            }
+
+            for (int x=0; x<3; x++){
+
+            }
+        }
 	}
 }

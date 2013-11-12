@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
@@ -33,7 +33,7 @@ namespace MCP_AI
                 //fireEnabled = false;
 
                 RaycastHit hitInfo = new RaycastHit();
-                Ray r = new Ray(transform.position, _state.AttackTarget.transform.position);
+                Ray r = new Ray(transform.position, (_state.AttackTarget.transform.position-transform.position).normalized);
 
 
                 
@@ -47,12 +47,18 @@ namespace MCP_AI
                 rend.SetPosition(0, r.origin);
                 rend.SetPosition(1, hitInfo.point);// _state.AttackTarget.transform.position);
                */
-                Debug.DrawLine(r.origin, hitInfo., Color.magenta, 2f);
+
+                Vector3 dest = r.origin + (r.direction * hitInfo.distance);
+
+
+                Debug.DrawLine(r.origin,  dest, Color.magenta, 2f,true);
                 if (hasHit)
                 {
                     Debug.Log("HIT: "+hitInfo.point);
                     if (hitInfo.collider.gameObject.tag.Equals("Player"))
                     {
+
+                        Debug.Log("Wounded: " + hitInfo.point);
                         hitInfo.collider.gameObject.GetComponent<AgentAI>()._state.Wound(3);
                     }
                 }

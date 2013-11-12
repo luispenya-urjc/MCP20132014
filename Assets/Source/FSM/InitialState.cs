@@ -19,7 +19,7 @@ namespace FSM
 
         public override void Execute(StateMachine obj)
         {
-            Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
+           // Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
             /*if (obj.environment.Show)
             {
                 obj.ChangeState(ChaseState.GetInstance());

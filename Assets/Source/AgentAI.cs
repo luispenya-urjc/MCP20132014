@@ -51,7 +51,14 @@ namespace MCP_AI
             StartCoroutine(UpdateAIController(0.5f));
         }
 
-      
+
+        void Update()
+        {
+            if (_state.Hits <= 0)
+            {
+                GameObject.Destroy(gameObject);
+            }
+        }
 
     }
 }
