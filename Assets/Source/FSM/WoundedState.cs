@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace FSM
+namespace MCP_AI
 {
 	class WoundedState: State
 	{
@@ -20,7 +20,7 @@ namespace FSM
         public override void Execute(StateMachine obj)
         {
             Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
-            if (obj.environment.Wounds < 3)
+            if (obj.environment.enabled)
             {
                 obj.ChangeState(obj.previousState);
             }

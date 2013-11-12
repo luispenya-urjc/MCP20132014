@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using MCP_AI;
 
-namespace FSM
+namespace MCP_AI
 {
 	class InitialState: State
 	{
@@ -34,7 +34,7 @@ namespace FSM
             s.AttackTarget = GameObject.Find("AttTarget");
 
 
-            if (s.CurrentPath.IsDone())
+            if (s.CurrentPath!=null  && s.CurrentPath.IsDone())
             {
                 obj.ChangeState(RoamState.GetInstance());
             }

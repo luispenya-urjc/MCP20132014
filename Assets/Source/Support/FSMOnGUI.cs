@@ -5,14 +5,14 @@ using System.Collections;
 public class FSMOnGUI : MonoBehaviour {
 
     public GameObject environment_obj;
-    private FSM.Environment environment;
+    private MCP_AI.Environment environment;
     void Start()
     {
         if (environment_obj != null)
-            environment = environment_obj.GetComponent<FSM.Environment>();
+            environment = environment_obj.GetComponent<MCP_AI.Environment>();
     }
 
-    void OnGUI()
+    /*void OnGUI()
     {
         // Make a background box
         GUI.Box(new Rect(10, 10, 180, 170), "Simulated Events");
@@ -46,5 +46,5 @@ public class FSMOnGUI : MonoBehaviour {
             Debug.Log(environment.ToString()+" ... "+ placeHolder);
            
         }
-    }
+    }*/
 }

@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using MCP_AI;
 
-namespace FSM
+namespace MCP_AI
 {
 	class RoamState: State
 	{

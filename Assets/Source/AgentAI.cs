@@ -21,7 +21,7 @@ namespace MCP_AI
         public AIController _controller;
         void Awake()
         {
-            _state = new AgentState();
+            //_state = new AgentState(AgentState.EXPLORER);
             switch (controllerType){
                 case OPTIONS.FSMAI:
                     _controller=new FSMAI(gameObject);
@@ -31,10 +31,10 @@ namespace MCP_AI
                     _controller=new FSMAI(gameObject);
                     break;
             }
-            _controller.Init();
+            //_controller.Init();
         }
 
-
+        
         IEnumerator UpdateAIController(float waitTime)
         {
             while (true)
@@ -48,6 +48,7 @@ namespace MCP_AI
         // Use this for initialization
         void Start()
         {
+            _controller.Init();
             StartCoroutine(UpdateAIController(0.5f));
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace FSM
+namespace MCP_AI
 {
     public abstract class State
     {

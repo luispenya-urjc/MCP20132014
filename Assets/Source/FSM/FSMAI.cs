@@ -6,7 +6,7 @@ namespace MCP_AI
     public class FSMAI : AIController
     {
 
-        private FSM.StateMachine state_machine = new FSM.StateMachine();
+        private MCP_AI.StateMachine state_machine = new MCP_AI.StateMachine();
         public Object blood;
 
        
@@ -44,7 +44,7 @@ namespace MCP_AI
 
         public override void Init()
         {
-            FSM.Environment environment = GameObject.Find("Environment").GetComponent<FSM.Environment>();
+            MCP_AI.Environment environment = GameObject.Find("Environment").GetComponent<MCP_AI.Environment>();
             state_machine.Init(_agent, environment);
         }
 

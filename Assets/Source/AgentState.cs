@@ -72,5 +72,67 @@ namespace MCP_AI
             get { return _attackTarget; }
             set { _attackTarget = value; }
         }
+
+        private bool _canHeal = false;
+
+        public bool CanHeal
+        {
+            get { return _canHeal; }
+            
+        }
+        public float HealRange = 3f;
+        public float HealCooldown = 8f;
+
+        public AttackType[] attackTypes=new AttackType[3];
+
+        private int _currentAttackType = 0;
+
+        public int CurrentAttackType
+        {
+            get { return _currentAttackType; }
+            set { _currentAttackType = value; }
+        }
+        
+
+        public const int SNIPER  = 0;
+        public const int EXPLORER = 1;
+        public const int SOLDIER  = 2;
+        public const int SUPPORT  = 3;
+
+        public void SetRole(int agentType)
+        {
+            switch (agentType)
+            {
+                case SNIPER:
+                    _maxHits = 6;
+                    _speed = 75;
+                    attackTypes[AgentAttack.LONG_RANGE] = new AttackType(50f, 0.2f, 5f,10);
+                    attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(20f, 0.8f,4f,3);
+                    attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(10f, 1.0f, 3f, 3);
+                    break;
+                case EXPLORER:
+                    _maxHits = 10;
+                    _speed = 125;
+                    attackTypes[AgentAttack.LONG_RANGE] = new AttackType(40f, 2.2f, 4f, 3);
+                    attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(20f, 1.2f, 3f, 3);
+                    attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(15f, 0.5f, 2f, 5);
+                    break;
+                case SOLDIER:
+                    _maxHits = 12;
+                    _speed = 100;
+                    attackTypes[AgentAttack.LONG_RANGE] = new AttackType(50f, 1.2f, 4f, 3);
+                    attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(25f, 0.5f, 3f, 5);
+                    attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(10f, 1.0f, 3f, 5);
+                    break;
+                case SUPPORT:
+                    _maxHits = 6;
+                    _speed = 80;
+                    attackTypes[AgentAttack.LONG_RANGE] = new AttackType(40f, 2.0f, 5f, 3);
+                    attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(20f, 1.0f, 3f, 3);
+                    attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(10f, 1.0f, 3f, 3);
+                    break;
+            }
+            _hits = _maxHits;
+        }
     }
 }

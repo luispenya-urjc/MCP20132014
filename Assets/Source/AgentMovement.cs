@@ -22,6 +22,18 @@ public class AgentMovement : MonoBehaviour {
         movementController = GetComponent<CharacterController>();
        // StartupNode();
 
+
+        if (agentState.MovementTarget != null)
+            movementTarget = agentState.MovementTarget.transform;
+        else
+        {
+            GameObject o = new GameObject();
+            Vector3 pos=Random.insideUnitSphere * 25f;
+            pos.y = 0f;
+            o.transform.position=pos;
+            movementTarget = o.transform; 
+        }
+
         agentState.CurrentPath= ABPath.Construct (gameObject.transform.position, movementTarget.position);
         //path.CalculateStep(100);
 
@@ -41,9 +53,15 @@ public class AgentMovement : MonoBehaviour {
 
             if (currentWaypoint < agentState.CurrentPath.vectorPath.Count)
             {
-               
+
+                float speed = agentState.Speed;
+                if (agentState.CurrentAttackType != -1)
+                {
+                    speed /= 2.0f;
+                }
+
                 Vector3 dir = (agentState.CurrentPath.vectorPath[currentWaypoint] - transform.position).normalized;
-                dir *= agentState.Speed * Time.fixedDeltaTime;
+                dir *= speed * Time.fixedDeltaTime;
 
                 //Debug.Log("Move to WP:" + currentWaypoint + "  dir: " + -dir);
                // movementController.transform.LookAt(agentState.CurrentPath.vectorPath[currentWaypoint]);

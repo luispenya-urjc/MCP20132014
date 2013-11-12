@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace FSM
+namespace MCP_AI
 {
 	class ChaseState : State
 	{
@@ -19,10 +19,11 @@ namespace FSM
         public override void Execute(StateMachine obj)
         {
             Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
-            if (!obj.environment.Show)
+           /* if (!obj.environment.Show)
             {
                 obj.ChangeState(InitialState.GetInstance());
             }
+            */ 
         }
 
         public override void Exit(StateMachine obj)
