@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using MCP_AI;
 
-namespace MCP_AI
+namespace FSM
 {
     public class FSMAI : AIController
     {
 
-        private MCP_AI.StateMachine state_machine = new MCP_AI.StateMachine();
+        private StateMachine state_machine = new StateMachine();
         public Object blood;
 
        
@@ -14,8 +15,8 @@ namespace MCP_AI
         // Use this for initialization
         public FSMAI(GameObject agent)
         {
-            _agent = agent;
-            Init();
+            
+            Init(agent);
             
             //    .StartCoroutine(RefreshFSM(2.0F));
 
@@ -42,9 +43,10 @@ namespace MCP_AI
             MonoBehaviour.Destroy(o, 1.0f);
         }
 
-        public override void Init()
+        public override void Init(GameObject agent)
         {
-            MCP_AI.Environment environment = GameObject.Find("Environment").GetComponent<MCP_AI.Environment>();
+            base.Init(agent);
+            MCP_AI.Environment environment = GetEnvironment();
             state_machine.Init(_agent, environment);
         }
 

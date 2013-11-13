@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using FSM;
 
 namespace MCP_AI
 {
@@ -48,7 +49,7 @@ namespace MCP_AI
         // Use this for initialization
         void Start()
         {
-            _controller.Init();
+            _controller.Init(gameObject);
             StartCoroutine(UpdateAIController(0.5f));
         }
 

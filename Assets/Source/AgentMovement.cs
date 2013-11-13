@@ -58,7 +58,12 @@ public class AgentMovement : MonoBehaviour {
                 if (agentState.CurrentAttackType != -1)
                 {
                     speed /= 2.0f;
+                } 
+                if (agentState.Healing)
+                {
+                    speed = 0f;
                 }
+
 
                 Vector3 dir = (agentState.CurrentPath.vectorPath[currentWaypoint] - transform.position).normalized;
                 dir *= speed * Time.fixedDeltaTime;

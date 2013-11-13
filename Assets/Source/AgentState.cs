@@ -31,12 +31,12 @@ namespace MCP_AI
             
         }
 
-        public void Heal(int val)
+        internal void Heal(int val)
         {
-            _hits=System.Math.Min(_hits +val,_maxHits);
+            _hits = System.Math.Min(_hits + val, _maxHits);
         }
 
-        public void Wound(int val)
+        internal void Wound(int val)
         {
             _hits -= val;
         }
@@ -80,8 +80,35 @@ namespace MCP_AI
             get { return _canHeal; }
             
         }
-        public float HealRange = 3f;
-        public float HealCooldown = 8f;
+        private float _healRange = 5f;
+
+        public float HealRange
+        {
+            get { return _healRange; }
+        }
+        private float _healCooldown = 8f;
+
+        public float HealCooldown
+        {
+            get { return _healCooldown; }
+        }
+
+        private bool _healing = false;
+
+        public bool Healing
+        {
+            get { return _healing; }
+            set { _healing = value; }
+        }
+
+        private int _healPoints=2;
+
+        public int HealPoints
+        {
+            get { return _healPoints; }
+            
+        }
+
 
         public AttackType[] attackTypes=new AttackType[3];
 
@@ -130,9 +157,14 @@ namespace MCP_AI
                     attackTypes[AgentAttack.LONG_RANGE] = new AttackType(40f, 2.0f, 5f, 3);
                     attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(20f, 1.0f, 3f, 3);
                     attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(10f, 1.0f, 3f, 3);
+                    _canHeal = true;
                     break;
             }
             _hits = _maxHits;
         }
+
+
+        
+
     }
 }

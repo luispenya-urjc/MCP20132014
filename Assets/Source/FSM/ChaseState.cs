@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using MCP_AI;
 
-namespace MCP_AI
+namespace FSM
 {
 	class ChaseState : State
 	{

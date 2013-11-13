@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace MCP_AI
+namespace FSM
 {
 	class WoundedState: State
 	{
@@ -20,6 +20,7 @@ namespace MCP_AI
         public override void Execute(StateMachine obj)
         {
             Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
+            obj.controller.HealNow();
             if (obj.environment.enabled)
             {
                 obj.ChangeState(obj.previousState);

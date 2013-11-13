@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using MCP_AI;
 
-namespace MCP_AI
+namespace FSM
 {
 	class InitialState: State
 	{
