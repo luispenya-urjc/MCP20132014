@@ -11,10 +11,14 @@ namespace MCP_AI
 
         private GameObject GenerateCombatant(string name, int role, string areas)
         {
+            Terrain t = GameObject.Find("Terrain").GetComponent<Terrain>();
+            
+            
             GameObject[] s = GameObject.FindGameObjectsWithTag(areas);
             int i = UnityEngine.Random.Range(0, s.Length);
             Vector3 pos = s[i].transform.position + (UnityEngine.Random.insideUnitSphere * (s[i].transform.localScale.x / 2.0f));
-            pos.y = 1f;
+   
+            pos.y = 1f + t.SampleHeight(pos);
             GameObject o = Instantiate(Resources.Load("AIActor"), pos, Quaternion.identity) as GameObject;
 
             o.name = name;

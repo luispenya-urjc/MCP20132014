@@ -41,7 +41,7 @@ namespace MCP_AI
             while (true)
             {
                 yield return new WaitForSeconds(waitTime);
-                print("Refreshing FSM " + Time.time);
+               // print("Refreshing FSM " + Time.time);
                 _controller.RefreshAI();
             }
         }

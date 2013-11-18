@@ -13,6 +13,8 @@ public class AgentMovement : MonoBehaviour {
     private CharacterController movementController=null;
     private int currentWaypoint=0;
 
+    private Transform lastMovementTarget = null;
+
     private float minDistanceToWayPoint = 1.5f;
     // Use this for initialization
 	void Start () {
@@ -44,6 +46,12 @@ public class AgentMovement : MonoBehaviour {
    
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (movementTarget != lastMovementTarget) //ReplanPath
+        {
+            lastMovementTarget = movementTarget;
+            agentState.CurrentPath = ABPath.Construct(gameObject.transform.position, movementTarget.position);
+            seek.StartPath(agentState.CurrentPath, OnPathComplete, -1);
+        }
         if (movementTarget != null && seek.IsDone() && agentState.Moving)
         {
             if (animation.IsPlaying("idle"))
