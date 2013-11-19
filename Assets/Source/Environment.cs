@@ -9,6 +9,9 @@ namespace MCP_AI
 	public class Environment: MonoBehaviour
 	{
 
+		public Time timer;
+	
+	
         private GameObject GenerateCombatant(string name, int role, string areas)
         {
             Terrain t = GameObject.Find("Terrain").GetComponent<Terrain>();
@@ -75,6 +78,24 @@ namespace MCP_AI
                 o.name = "KeyLoc-" + x;
                 o.transform.parent = p.transform;
             }
+			timer=Time.time+240f; //4minutos
+			
         }
+		
+		private bool hasFinalLog=false;
+		private string finalLog;
+		void OnGUI() {
+			if (hasFinalLog){
+				 GUI.TextArea(new Rect(50, 50, 400, 200), finalLog);
+			}
+		}
+		
+		void Update() {
+			if (defenders.Size() <= 0 || attacker.Size()<=0 || Time.time > timer){
+				
+				Time.timeScale=0;
+				
+			}
+		}
 	}
 }

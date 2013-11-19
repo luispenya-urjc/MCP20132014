@@ -70,7 +70,11 @@ namespace MCP_AI
         public GameObject AttackTarget
         {
             get { return _attackTarget; }
-            set { _attackTarget = value; }
+            set { 
+				_attackTarget = value; 
+				_nextAttack = Time.time + attackTypes[_currentAttackType].cooldown;
+				_healing=false;
+			}
         }
 
         private bool _canHeal = false;
@@ -95,10 +99,20 @@ namespace MCP_AI
 
         private bool _healing = false;
 
+		private float _healingTime;
+		
+		public float HealingTime {
+			get {return _healingTime;}
+		}
         public bool Healing
         {
             get { return _healing; }
-            set { _healing = value; }
+            set { 
+				_healing = value; 
+				if (_healing)
+					_healingTime = Time.time+ _healCooldown;
+					_currentAttackType=-1;
+			}
         }
 
         private int _healPoints=2;
@@ -109,17 +123,25 @@ namespace MCP_AI
             
         }
 
-
         public AttackType[] attackTypes=new AttackType[3];
 
         private int _currentAttackType = 0;
 
+		private float _nextAttack;
+		public float NextAttack {
+			get { return _nextAttack; }
+		}
         public int CurrentAttackType
         {
             get { return _currentAttackType; }
-            set { _currentAttackType = value; }
+            set {
+				_currentAttackType = value; 
+				_nextAttack = Time.time + attackTypes[value].cooldown;
+				_healing=false;
+			}
         }
         
+		
 
         public const int SNIPER  = 0;
         public const int EXPLORER = 1;
@@ -133,7 +155,7 @@ namespace MCP_AI
                 case SNIPER:
                     _maxHits = 6;
                     _speed = 75;
-                    attackTypes[AgentAttack.LONG_RANGE] = new AttackType(50f, 0.2f, 5f,10);
+                    attackTypes[AgentAttack.LONG_RANGE] = new AttackType(50f, 0.2f, 5f,8);
                     attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(20f, 0.8f,4f,3);
                     attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(10f, 1.0f, 3f, 3);
                     break;
@@ -148,7 +170,7 @@ namespace MCP_AI
                     _maxHits = 12;
                     _speed = 100;
                     attackTypes[AgentAttack.LONG_RANGE] = new AttackType(50f, 1.2f, 4f, 3);
-                    attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(25f, 0.5f, 3f, 5);
+                    attackTypes[AgentAttack.MEDIUM_RANGE] = new AttackType(25f, 0.8f, 3f, 5);
                     attackTypes[AgentAttack.SHORT_RANGE] = new AttackType(10f, 1.0f, 3f, 5);
                     break;
                 case SUPPORT:

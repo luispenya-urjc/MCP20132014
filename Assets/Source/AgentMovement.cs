@@ -8,7 +8,7 @@ public class AgentMovement : MonoBehaviour {
     private Seeker seek;
     public AgentState agentState;
 
-    public Transform movementTarget=null;
+//    public Transform movementTarget=null;
 
     private CharacterController movementController=null;
     private int currentWaypoint=0;
@@ -25,34 +25,45 @@ public class AgentMovement : MonoBehaviour {
        // StartupNode();
 
 
-        if (agentState.MovementTarget != null)
+        if (agentState.MovementTarget != null){
             movementTarget = agentState.MovementTarget.transform;
-        else
+        /*else
         {
             GameObject o = new GameObject();
             Vector3 pos=Random.insideUnitSphere * 25f;
             pos.y = 0f;
             o.transform.position=pos;
             movementTarget = o.transform; 
-        }
-
-        agentState.CurrentPath= ABPath.Construct (gameObject.transform.position, movementTarget.position);
-        //path.CalculateStep(100);
-
-        seek.StartPath(agentState.CurrentPath, OnPathComplete, -1);
-       
+        }*/
+		
+		RecalculatePath();
+       }
 	}
 	
+	public void RecalculatePath(){
+		
+		if (movementTarget!=null) {
+			agentState.Moving=false;
+			lastMovementTarget = agentState.MovementTarget.transform;
+			agentState.CurrentPath= ABPath.Construct (gameObject.transform.position, agentState.MovementTarget.position);
+        //path.CalculateStep(100);
+
+			seek.StartPath(agentState.CurrentPath, OnPathComplete, -1);
+			
+		}
+	}
+   
+	private bool MoveEnabled(){
+		return (agentState.Moving && ! agentState.Healing && seek.IsDone && agentState.MovementTarget!=null);
+	}	
    
 	// Update is called once per frame
 	void FixedUpdate () {
-        if (movementTarget != lastMovementTarget) //ReplanPath
+        if (agentState.MovementTarget != lastMovementTarget) //ReplanPath
         {
-            lastMovementTarget = movementTarget;
-            agentState.CurrentPath = ABPath.Construct(gameObject.transform.position, movementTarget.position);
-            seek.StartPath(agentState.CurrentPath, OnPathComplete, -1);
+            RecalculatePath();
         }
-        if (movementTarget != null && seek.IsDone() && agentState.Moving)
+        if (MoveEnabled())
         {
             if (animation.IsPlaying("idle"))
             {
@@ -63,7 +74,7 @@ public class AgentMovement : MonoBehaviour {
             {
 
                 float speed = agentState.Speed;
-                if (agentState.CurrentAttackType != -1)
+                if (agentState.NextAttack > Time.time)
                 {
                     speed /= 2.0f;
                 } 
@@ -76,8 +87,6 @@ public class AgentMovement : MonoBehaviour {
                 Vector3 dir = (agentState.CurrentPath.vectorPath[currentWaypoint] - transform.position).normalized;
                 dir *= speed * Time.fixedDeltaTime;
 
-                //Debug.Log("Move to WP:" + currentWaypoint + "  dir: " + -dir);
-               // movementController.transform.LookAt(agentState.CurrentPath.vectorPath[currentWaypoint]);
                 transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                         Quaternion.LookRotation(new Vector3(dir.x,0f,dir.z)),
@@ -112,7 +121,9 @@ public class AgentMovement : MonoBehaviour {
     void OnPathComplete(Path p)
     {
         Debug.Log("Path Length: "+p.GetTotalLength());
-        Debug.Log(agentState.CurrentPath.DebugString(PathLog.Heavy)); 
+        Debug.Log(agentState.CurrentPath.DebugString(PathLog.Heavy));
+		agentState.Moving=true;
+		
     } 
 
     void StartupNode()

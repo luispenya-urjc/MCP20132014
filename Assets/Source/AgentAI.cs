@@ -14,23 +14,22 @@ namespace MCP_AI
             FSMAI = 0,
             BTAI = 1,
             RandomAI = 2,
+			CustomAI = 3,
         }
 
         public AgentState _state;
 
         public OPTIONS controllerType=OPTIONS.FSMAI;
-        public AIController _controller;
+        public AIController _controller=null;
         void Awake()
         {
             //_state = new AgentState(AgentState.EXPLORER);
             switch (controllerType){
                 case OPTIONS.FSMAI:
-                    _controller=new FSMAI(gameObject);
+                    _controller=FSMAI.CreateInstance(gameObject);
                     break;
                 
-                default:
-                    _controller=new FSMAI(gameObject);
-                    break;
+                
             }
             //_controller.Init();
         }
@@ -49,6 +48,8 @@ namespace MCP_AI
         // Use this for initialization
         void Start()
         {
+			if (_controller!=null) {
+			}
             _controller.Init(gameObject);
             StartCoroutine(UpdateAIController(0.5f));
         }

@@ -7,8 +7,11 @@ using UnityEngine;
 
 namespace MCP_AI
 {
-	public abstract class AIController
+	public abstract class AIController : ScriptableObject
 	{
+		public string controllerName="AbstractController";
+		public string controllerRol;
+	
         protected GameObject _agent;
 
         protected AgentState _state;
@@ -63,7 +66,9 @@ namespace MCP_AI
             }
         }
 
-        public void Destroy()
+		
+		
+        internal void Destroy()
         {
             GameObject.Destroy(_agent);
         }
