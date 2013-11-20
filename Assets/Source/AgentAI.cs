@@ -19,14 +19,14 @@ namespace MCP_AI
 
         public AgentState _state;
 
-        public OPTIONS controllerType=OPTIONS.FSMAI;
+        public OPTIONS controllerType=OPTIONS.CustomAI;
         public AIController _controller=null;
         void Awake()
         {
             //_state = new AgentState(AgentState.EXPLORER);
             switch (controllerType){
                 case OPTIONS.FSMAI:
-                    _controller=FSMAI.CreateInstance(gameObject);
+                    _controller=AIController.CreateInstance<FSMAI>();//gameObject);
                     break;
                 
                 
@@ -46,12 +46,19 @@ namespace MCP_AI
         }
 
         // Use this for initialization
-        void Start()
+        IEnumerator Start()
         {
-			if (_controller!=null) {
-			}
-            _controller.Init(gameObject);
-            StartCoroutine(UpdateAIController(0.5f));
+            yield return new WaitForSeconds(1);
+            if (_controller != null)
+            {
+
+                _controller.Init(gameObject);
+                StartCoroutine(UpdateAIController(0.5f));
+            }
+            else
+            {
+                Debug.Log("ERROR no controller set!");
+            }
         }
 
 

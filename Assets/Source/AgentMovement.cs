@@ -25,9 +25,9 @@ public class AgentMovement : MonoBehaviour {
        // StartupNode();
 
 
-        if (agentState.MovementTarget != null){
+        /*if (agentState.MovementTarget != null){
             movementTarget = agentState.MovementTarget.transform;
-        /*else
+       } /*else
         {
             GameObject o = new GameObject();
             Vector3 pos=Random.insideUnitSphere * 25f;
@@ -37,12 +37,13 @@ public class AgentMovement : MonoBehaviour {
         }*/
 		
 		RecalculatePath();
-       }
+       
 	}
 	
 	public void RecalculatePath(){
-		
-		if (movementTarget!=null) {
+
+        if (agentState.MovementTarget != null)
+        {
 			agentState.Moving=false;
 			lastMovementTarget = agentState.MovementTarget.transform;
 			agentState.CurrentPath= ABPath.Construct (gameObject.transform.position, agentState.MovementTarget.position);
@@ -54,7 +55,7 @@ public class AgentMovement : MonoBehaviour {
 	}
    
 	private bool MoveEnabled(){
-		return (agentState.Moving && ! agentState.Healing && seek.IsDone && agentState.MovementTarget!=null);
+		return (agentState.Moving && ! agentState.Healing && seek.IsDone() && agentState.MovementTarget!=null);
 	}	
    
 	// Update is called once per frame

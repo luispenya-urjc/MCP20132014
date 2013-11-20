@@ -13,10 +13,10 @@ namespace FSM
        
 
         // Use this for initialization
-        public FSMAI(GameObject agent)
+        public FSMAI()//GameObject agent)
         {
             
-            Init(agent);
+            //Init(agent);
             
             //    .StartCoroutine(RefreshFSM(2.0F));
 

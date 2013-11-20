@@ -9,9 +9,12 @@ namespace MCP_AI
 	public class Environment: MonoBehaviour
 	{
 
-		public Time timer;
-	
-	
+		public float timer;
+
+        public AgentAI.OPTIONS attackerControllerType;
+        public Type attackController;
+        public AgentAI.OPTIONS defenderControllerType;
+
         private GameObject GenerateCombatant(string name, int role, string areas)
         {
             Terrain t = GameObject.Find("Terrain").GetComponent<Terrain>();
@@ -25,8 +28,11 @@ namespace MCP_AI
             GameObject o = Instantiate(Resources.Load("AIActor"), pos, Quaternion.identity) as GameObject;
 
             o.name = name;
+            Debug.Log("Setting up controller " + attackController.Name);
+            o.GetComponent<MCP_AI.AgentAI>()._controller = ScriptableObject.CreateInstance(attackController) as AIController;
             o.GetComponent<MCP_AI.AgentAI>()._state = ScriptableObject.CreateInstance<AgentState>();
             o.GetComponent<MCP_AI.AgentAI>()._state.SetRole(role);// new MCP_AI.AgentState(role);
+            
 
             return o;
         }
@@ -91,7 +97,7 @@ namespace MCP_AI
 		}
 		
 		void Update() {
-			if (defenders.Size() <= 0 || attacker.Size()<=0 || Time.time > timer){
+			if (defenders.Count <= 0 || attackers.Count <=0 || Time.time > timer){
 				
 				Time.timeScale=0;
 				
