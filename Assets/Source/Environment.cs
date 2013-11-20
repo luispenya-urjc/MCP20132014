@@ -9,13 +9,46 @@ namespace MCP_AI
 	public class Environment: MonoBehaviour
 	{
 
+        public enum FACTIONS
+        {
+            ATTACKER=1,
+            DEFENDER=2,
+        }
+
 		public float timer;
+        public float currentTime=0f;
 
-        public AgentAI.OPTIONS attackerControllerType;
-        public Type attackController;
-        public AgentAI.OPTIONS defenderControllerType;
+        private AgentAI.OPTIONS _attackerControllerType;
 
-        private GameObject GenerateCombatant(string name, int role, string areas)
+        public AgentAI.OPTIONS AttackerControllerType
+        {
+            get { return _attackerControllerType; }
+            set { _attackerControllerType = value; }
+        }
+
+        public string _attackController;
+
+        public string AttackController
+        {
+            get { return _attackController; }
+            set { _attackController = value; }
+        }
+        private AgentAI.OPTIONS _defenderControllerType;
+
+        public AgentAI.OPTIONS DefenderControllerType
+        {
+            get { return _defenderControllerType; }
+            set { _defenderControllerType = value; }
+        }
+        public string _defendController;
+
+        public string DefendController
+        {
+            get { return _defendController; }
+            set { _defendController = value; }
+        }
+
+        private GameObject GenerateCombatant(string name, int role, string areas, FACTIONS faction)
         {
             Terrain t = GameObject.Find("Terrain").GetComponent<Terrain>();
             
@@ -28,8 +61,22 @@ namespace MCP_AI
             GameObject o = Instantiate(Resources.Load("AIActor"), pos, Quaternion.identity) as GameObject;
 
             o.name = name;
-            Debug.Log("Setting up controller " + attackController.Name);
-            o.GetComponent<MCP_AI.AgentAI>()._controller = ScriptableObject.CreateInstance(attackController) as AIController;
+            
+            switch(faction ){
+                case FACTIONS.ATTACKER:
+                    Debug.Log("Setting up controller (" + _attackController+")");
+                    o.GetComponent<MCP_AI.AgentAI>()._controller = ScriptableObject.CreateInstance(_attackController) as AIController;
+                    o.GetComponent<MCP_AI.AgentAI>()._controller.faction = FACTIONS.ATTACKER;
+                    break;
+                case FACTIONS.DEFENDER:
+                    Debug.Log("Setting up controller " + _defendController);
+                    o.GetComponent<MCP_AI.AgentAI>()._controller = ScriptableObject.CreateInstance(_defendController) as AIController;
+                    o.GetComponent<MCP_AI.AgentAI>()._controller.faction = FACTIONS.DEFENDER;
+                    break;
+                default:
+                    throw new Exception("ERROR controller initialization failled");
+            } 
+
             o.GetComponent<MCP_AI.AgentAI>()._state = ScriptableObject.CreateInstance<AgentState>();
             o.GetComponent<MCP_AI.AgentAI>()._state.SetRole(role);// new MCP_AI.AgentState(role);
             
@@ -41,27 +88,27 @@ namespace MCP_AI
         public List<GameObject> defenders;
 
 
-        private void GenerateTeam(string team,List<GameObject> list,string areas) 
+        private void GenerateTeam(string team,List<GameObject> list,string areas, FACTIONS faction) 
         {
 
             GameObject t = new GameObject(team);
             t.transform.parent = gameObject.transform;
 
             GameObject o;
-            o = GenerateCombatant(team+"-Explorer", MCP_AI.AgentState.EXPLORER, areas);
+            o = GenerateCombatant(team+"-Explorer", MCP_AI.AgentState.EXPLORER, areas,faction);
             o.transform.parent = t.transform;
 
             list.Add(o);
-            o = GenerateCombatant(team + "-Sniper", MCP_AI.AgentState.SNIPER, areas);
+            o = GenerateCombatant(team + "-Sniper", MCP_AI.AgentState.SNIPER, areas,faction);
             o.transform.parent = t.transform;
             list.Add(o);
-            o = GenerateCombatant(team + "-Soldier-1", MCP_AI.AgentState.SOLDIER, areas);
+            o = GenerateCombatant(team + "-Soldier-1", MCP_AI.AgentState.SOLDIER, areas,faction);
             o.transform.parent = t.transform;
             list.Add(o);
-            o = GenerateCombatant(team + "-Soldier-2", MCP_AI.AgentState.SOLDIER, areas);
+            o = GenerateCombatant(team + "-Soldier-2", MCP_AI.AgentState.SOLDIER, areas,faction);
             o.transform.parent = t.transform;
             list.Add(o);
-            o = GenerateCombatant(team + "-Support", MCP_AI.AgentState.SUPPORT, areas);
+            o = GenerateCombatant(team + "-Support", MCP_AI.AgentState.SUPPORT, areas,faction);
             o.transform.parent = t.transform;
             list.Add(o);
         
@@ -71,8 +118,8 @@ namespace MCP_AI
         {
             attackers=new List<GameObject>();
             defenders=new List<GameObject>();
-            GenerateTeam("Attackers",attackers,"spawnarea-attack");
-            GenerateTeam("Defenders",defenders,"spawnarea-defend");
+            GenerateTeam("Attackers",attackers,"spawnarea-attack",FACTIONS.ATTACKER);
+            GenerateTeam("Defenders",defenders,"spawnarea-defend",FACTIONS.DEFENDER);
                     
             GameObject[] defendareas=GameObject.FindGameObjectsWithTag("spawnarea-defend");
             GameObject p=new GameObject("KeyLocs");
@@ -97,10 +144,13 @@ namespace MCP_AI
 		}
 		
 		void Update() {
-			if (defenders.Count <= 0 || attackers.Count <=0 || Time.time > timer){
+            currentTime = Time.time;
+                
+			if (defenders.Count <= 0 || attackers.Count <=0 || currentTime > timer){
 				
 				Time.timeScale=0;
-				
+                hasFinalLog = true;
+                finalLog = "TIME: " + currentTime + "\n";
 			}
 		}
 	}

@@ -11,6 +11,8 @@ namespace MCP_AI
 	{
 		public string controllerName="AbstractController";
 		public string controllerRol;
+
+        public Environment.FACTIONS faction;
 	
         protected GameObject _agent;
 

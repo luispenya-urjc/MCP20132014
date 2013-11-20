@@ -36,13 +36,7 @@ namespace FSM
 
        */
 
-        void OnDestroy()
-        {
-            Object o = GameObject.Instantiate(blood, _agent.transform.position, _agent.transform.rotation);
-            float time = ((GameObject)o).particleSystem.duration;
-            MonoBehaviour.Destroy(o, 1.0f);
-        }
-
+       
         public override void Init(GameObject agent)
         {
             base.Init(agent);

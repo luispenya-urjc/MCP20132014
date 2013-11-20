@@ -66,9 +66,15 @@ namespace MCP_AI
         {
             if (_state.Hits <= 0)
             {
-                GameObject.Destroy(gameObject);
+                Object o = GameObject.Instantiate(GameObject.Find("Blood"), transform.position, transform.rotation);
+                float time = ((GameObject)o).particleSystem.duration;
+                
+                GameObject.Destroy(o, 1.0f);
+        //        GameObject.Destroy(gameObject);
             }
         }
+
+        
 
     }
 }
