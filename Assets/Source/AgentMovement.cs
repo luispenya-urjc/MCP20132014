@@ -6,7 +6,8 @@ namespace MCP_AI {
 public class AgentMovement : MonoBehaviour {
 
     private Seeker seek;
-    public AgentState agentState;
+    private AgentState agentState;
+    public Transform target;
 
 //    public Transform movementTarget=null;
 
@@ -44,6 +45,10 @@ public class AgentMovement : MonoBehaviour {
 
         if (agentState.MovementTarget != null)
         {
+            target = agentState.MovementTarget;
+
+
+
 			agentState.Moving=false;
 			lastMovementTarget = agentState.MovementTarget.transform;
 			agentState.CurrentPath= ABPath.Construct (gameObject.transform.position, agentState.MovementTarget.position);
@@ -121,8 +126,8 @@ public class AgentMovement : MonoBehaviour {
 
     void OnPathComplete(Path p)
     {
-        Debug.Log("Path Length: "+p.GetTotalLength());
-        Debug.Log(agentState.CurrentPath.DebugString(PathLog.Heavy));
+        //Debug.Log("Path Length: "+p.GetTotalLength());
+        //Debug.Log(agentState.CurrentPath.DebugString(PathLog.Heavy));
 		agentState.Moving=true;
 		
     } 

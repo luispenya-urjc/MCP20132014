@@ -52,6 +52,13 @@ namespace MCP_AI
             GetState().MovementTarget = target;
         }
 
+        /*public void ReplanMovement()
+        {
+            Transform t=GetState().MovementTarget;
+            GetState().MovementTarget = null;
+            
+        }*/
+
         public Environment GetEnvironment()
         {
             return GameObject.Find("Environment").GetComponent<Environment>();

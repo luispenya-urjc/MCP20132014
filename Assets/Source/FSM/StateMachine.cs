@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using MCP_AI;
 
@@ -13,6 +14,46 @@ namespace FSM
         public Environment environment;
         public GameObject agent;
         public FSMAI controller;
+
+        internal List<GameObject> GetFriends()
+        {
+            if (controller.faction == Environment.FACTIONS.ATTACKER)
+                return environment.attackers;
+            else
+                return environment.defenders;
+        }
+
+        internal List<GameObject> GetFoes()
+        {
+            if (controller.faction != Environment.FACTIONS.ATTACKER)
+                return environment.attackers;
+            else
+                return environment.defenders;
+        }
+
+        internal GameObject FindClosestEnemy()
+        {
+            Vector3 orig=agent.transform.position;
+            if (GetFoes().Count>0){
+                GameObject res=GetFoes()[0];
+                
+
+                float dist = Vector3.Distance(orig, res.transform.position);
+                float aux;
+                foreach (GameObject o in GetFoes())
+                {
+                    aux=Vector3.Distance(orig, o.transform.position);
+                    if (dist > aux)
+                    {
+                        dist = aux;
+                        res = o;
+                    }
+                }
+                return res;
+            } else {
+                return null;
+            }
+        }
 
         // Use this for initialization
         internal void Init(GameObject obj, Environment env)

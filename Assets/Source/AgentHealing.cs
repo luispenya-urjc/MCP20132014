@@ -26,7 +26,7 @@ namespace MCP_AI
                 healingSphere.transform.parent = gameObject.transform;
                 healingSphere.transform.localPosition = Vector3.zero;
                 healingSphere.transform.localScale = new Vector3(_state.HealRange, _state.HealRange);
-                _col=healingSphere.AddComponent<SphereCollider>();
+                _col=healingSphere.GetComponent<SphereCollider>();
                 healingSphere.renderer.enabled = false;
                 
             }

@@ -71,9 +71,12 @@ namespace MCP_AI
         {
             get { return _attackTarget; }
             set { 
-				_attackTarget = value; 
-				_nextAttack = Time.time + attackTypes[_currentAttackType].cooldown;
-				_healing=false;
+				_attackTarget = value;
+                if (_currentAttackType != -1)
+                {
+                    _nextAttack = Time.time + attackTypes[_currentAttackType].cooldown;
+                    _healing = false;
+                }
 			}
         }
 
@@ -135,9 +138,12 @@ namespace MCP_AI
         {
             get { return _currentAttackType; }
             set {
-				_currentAttackType = value; 
-				_nextAttack = Time.time + attackTypes[value].cooldown;
-				_healing=false;
+				_currentAttackType = value;
+                if (value != -1)
+                {
+                    _nextAttack = Time.time + attackTypes[value].cooldown;
+                    _healing = false;
+                }
 			}
         }
         

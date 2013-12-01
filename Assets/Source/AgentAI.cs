@@ -45,10 +45,11 @@ namespace MCP_AI
             }
         }
 
+
         // Use this for initialization
         IEnumerator Start()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             if (_controller != null)
             {
 
@@ -66,11 +67,16 @@ namespace MCP_AI
         {
             if (_state.Hits <= 0)
             {
-                Object o = GameObject.Instantiate(GameObject.Find("Blood"), transform.position, transform.rotation);
+                Object o = GameObject.Instantiate(Resources.Load<GameObject>("Blood"), transform.position, transform.rotation);
                 float time = ((GameObject)o).particleSystem.duration;
                 
                 GameObject.Destroy(o, 1.0f);
-        //        GameObject.Destroy(gameObject);
+                StopAllCoroutines();
+
+                SendMessageUpwards("AgentDie", gameObject);
+                GameObject.Destroy(gameObject);
+                
+                
             }
         }
 

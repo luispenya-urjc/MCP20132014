@@ -74,7 +74,7 @@ namespace MCP_AI
                     o.GetComponent<MCP_AI.AgentAI>()._controller.faction = FACTIONS.DEFENDER;
                     break;
                 default:
-                    throw new Exception("ERROR controller initialization failled");
+                    throw new Exception("ERROR controller initialization failed");
             } 
 
             o.GetComponent<MCP_AI.AgentAI>()._state = ScriptableObject.CreateInstance<AgentState>();
@@ -153,5 +153,11 @@ namespace MCP_AI
                 finalLog = "TIME: " + currentTime + "\n";
 			}
 		}
+
+        void AgentDie(GameObject o)
+        {
+            attackers.Remove(o);
+            defenders.Remove(o);
+        }
 	}
 }

@@ -80,6 +80,7 @@ namespace MCP_AI
                     }
                 }
                 GameObject.Destroy(l,0.5f);
+                _state.CurrentAttackType=-1;//.NextAttack = Time.time + _state.attackTypes[_state.CurrentAttackType].cooldown;
             }
             
         }

@@ -13,29 +13,30 @@ namespace FSM
         public override void Enter(StateMachine obj)
         {
             Debug.Log("Enter " + this.GetType().Name);
+
+            
             obj.agent.animation.CrossFade("idle");
           
         }
 
+
+        
+
         public override void Execute(StateMachine obj)
         {
-           // Debug.Log("Execute: " + this.GetType().Name + "  Time: " + Time.time);
-            /*if (obj.environment.Show)
-            {
-                obj.ChangeState(ChaseState.GetInstance());
-            }
-            if (obj.environment.Sound)
-            {
-                obj.ChangeState(RoamState.GetInstance());
-            }
-             */
-            AgentState s=obj.agent.GetComponent<AgentAI>()._state;
-
-            s.AttackTarget = GameObject.Find("AttTarget");
 
 
-            if (s.CurrentPath!=null  && s.CurrentPath.IsDone())
+            AgentState s = obj.controller.GetState();
+
+           // s.AttackTarget = GameObject.Find("AttTarget");
+            
+            GameObject t = obj.FindClosestEnemy();
+            float d = Vector3.Distance(obj.agent.transform.position, t.transform.position);
+
+            Debug.Log(obj.agent.name + ":: " + d+" to "+t.transform.position);  
+            if (d > 20)
             {
+                
                 obj.ChangeState(RoamState.GetInstance());
             }
 
