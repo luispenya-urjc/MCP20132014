@@ -45,9 +45,11 @@ namespace FSM
             float d = Vector3.Distance(obj.agent.transform.position, t.transform.position);
 
             Debug.Log(obj.agent.name + ":: " + d+" to "+t.transform.position);  
-            if (d <= 20)
+            if (d <= 20 )
             {
-                obj.ChangeState(ChaseState.GetInstance());
+                int layer = 1 << 9;
+                if (!Physics.Raycast(obj.agent.transform.position, (t.transform.position-obj.agent.transform.position)/d,d,layer))
+                    obj.ChangeState(ChaseState.GetInstance());
             }
         }
 

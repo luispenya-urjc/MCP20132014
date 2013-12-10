@@ -154,6 +154,12 @@ namespace MCP_AI
         public const int SOLDIER  = 2;
         public const int SUPPORT  = 3;
 
+        private int role;
+        public int GetRole()
+        {
+            return role;
+        }
+
         public void SetRole(int agentType)
         {
             switch (agentType)
@@ -189,6 +195,7 @@ namespace MCP_AI
                     break;
             }
             _hits = _maxHits;
+            role = agentType;
         }
 
 

@@ -55,7 +55,7 @@ public class AgentMovement : MonoBehaviour {
         //path.CalculateStep(100);
 
 			seek.StartPath(agentState.CurrentPath, OnPathComplete, -1);
-			
+            currentWaypoint = 0;
 		}
 	}
    
@@ -76,7 +76,7 @@ public class AgentMovement : MonoBehaviour {
                 animation.Play("walk");
             }
 
-            if (currentWaypoint < agentState.CurrentPath.vectorPath.Count)
+            if (agentState.CurrentPath!=null && currentWaypoint < agentState.CurrentPath.vectorPath.Count)
             {
 
                 float speed = agentState.Speed;

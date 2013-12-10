@@ -18,6 +18,8 @@ namespace MCP_AI
 		public float timer;
         public float currentTime=0f;
 
+        private GameObject keyLocs;
+
         private AgentAI.OPTIONS _attackerControllerType;
 
         public AgentAI.OPTIONS AttackerControllerType
@@ -122,14 +124,14 @@ namespace MCP_AI
             GenerateTeam("Defenders",defenders,"spawnarea-defend",FACTIONS.DEFENDER);
                     
             GameObject[] defendareas=GameObject.FindGameObjectsWithTag("spawnarea-defend");
-            GameObject p=new GameObject("KeyLocs");
-            p.transform.parent=gameObject.transform;
+            keyLocs=new GameObject("KeyLocs");
+            keyLocs.transform.parent=gameObject.transform;
             for (int x=0; x<defendareas.Length; x++){
                 Vector3 pos = defendareas[x].transform.position + (UnityEngine.Random.insideUnitSphere * (defendareas[x].transform.localScale.x / 4.0f));
                 pos.y = 1f;
                 GameObject o = Instantiate(Resources.Load("KeyLoc"), pos, Quaternion.identity) as GameObject;
                 o.name = "KeyLoc-" + x;
-                o.transform.parent = p.transform;
+                o.transform.parent = keyLocs.transform;
             }
 			timer=Time.time+240f; //4minutos
 			
@@ -145,12 +147,47 @@ namespace MCP_AI
 		
 		void Update() {
             currentTime = Time.time;
-                
-			if (defenders.Count <= 0 || attackers.Count <=0 || currentTime > timer){
+
+
+            KeyLocProperty[] keys = keyLocs.GetComponentsInChildren<KeyLocProperty>();
+            int taken = 0;
+            foreach (KeyLocProperty k in keys)
+            {
+                if (k.taken)
+                    taken++;
+            }
+			if (defenders.Count <= 0 || attackers.Count <=0 || currentTime > timer || taken==keys.Length){
 				
 				Time.timeScale=0;
                 hasFinalLog = true;
-                finalLog = "TIME: " + currentTime + "\n";
+
+                float atacante = 0f;
+                float defensor = 0f;
+                //Puntos por condición de victoria
+                if (currentTime > timer || attackers.Count<=0)
+                {
+                    defensor += 15f;
+                }
+                else if (defenders.Count <= 0 || taken == keys.Length)
+                {
+                    atacante += 15f;
+                }
+                //Puntos por enemigos muertos
+                atacante += (5 - defenders.Count);
+                defensor += (5 - attackers.Count) / 2.0f;
+
+                //Puntos por KeyLocs
+                atacante += 4 * (taken);
+                defensor += 5 * (keys.Length - taken);
+
+                //Puntos por tiempo
+                defensor += (currentTime / 60f) * 0.5f;
+                atacante += ((timer - currentTime) / 60f) * 0.5f;
+                finalLog = "TIME: " + currentTime + "\n" ;
+                finalLog += "Atacantes Vivos: " + attackers.Count + "  Defensores Vivos: " + defenders.Count+"\n";
+                finalLog += "Puntos Tomados: " + taken + "\n";
+                finalLog += "Puntos Atacante (" + _attackController + "):" + atacante + "\n";
+                finalLog += "Puntos Defensor (" + _defendController + "):" + defensor + "\n";
 			}
 		}
 
