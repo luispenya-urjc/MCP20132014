@@ -28,8 +28,13 @@ namespace MCP_AI
                 case OPTIONS.FSMAI:
                     _controller=AIController.CreateInstance<FSMAI>();//gameObject);
                     break;
-                
-                
+                case OPTIONS.RandomAI:
+                    _controller = AIController.CreateInstance<RandomAI>();
+                    break;
+                case OPTIONS.BTAI:
+                    _controller = AIController.CreateInstance<BT.BTAI>();
+                    break;
+
             }
             //_controller.Init();
         }

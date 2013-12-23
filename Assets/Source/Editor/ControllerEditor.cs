@@ -21,10 +21,10 @@ public class ControllerEditor : Editor {
                 return typeof(FSM.FSMAI).Name;
                 
             case MCP_AI.AgentAI.OPTIONS.BTAI:
-                return typeof(FSM.FSMAI).Name;
+                return typeof(BT.BTAI).Name;
                 
             case MCP_AI.AgentAI.OPTIONS.RandomAI:
-                return typeof(FSM.FSMAI).Name;
+                return typeof(RandomAI).Name;
             case MCP_AI.AgentAI.OPTIONS.CustomAI:
                 return ms.GetClass().Name;
 
