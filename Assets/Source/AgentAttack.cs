@@ -61,7 +61,10 @@ namespace MCP_AI
                 Vector3 dir = (_state.AttackTarget.transform.position - transform.position + randomized).normalized;
                 Ray r = new Ray(transform.position, dir);
 
-                bool hasHit = Physics.Raycast(r, out hitInfo, _state.attackTypes[_state.CurrentAttackType].range);
+                int mask=1<<LayerMask.NameToLayer("Ignore Raycast");
+                mask=~mask;
+               
+                bool hasHit = Physics.Raycast(r, out hitInfo, _state.attackTypes[_state.CurrentAttackType].range,mask);
                 Vector3 dest = r.origin + (r.direction * hitInfo.distance);
 
 

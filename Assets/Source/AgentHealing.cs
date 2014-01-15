@@ -23,6 +23,7 @@ namespace MCP_AI
             if (_state != null && _state.CanHeal)
             {
                 healingSphere=GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                healingSphere.layer = LayerMask.NameToLayer("Ignore Raycast");
                 healingSphere.transform.parent = gameObject.transform;
                 healingSphere.transform.localPosition = Vector3.zero;
                 healingSphere.transform.localScale = new Vector3(_state.HealRange, _state.HealRange);

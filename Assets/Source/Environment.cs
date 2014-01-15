@@ -118,6 +118,9 @@ namespace MCP_AI
 
         void Start()
         {
+
+           
+
             attackers=new List<GameObject>();
             defenders=new List<GameObject>();
             GenerateTeam("Attackers",attackers,"spawnarea-attack",FACTIONS.ATTACKER);
